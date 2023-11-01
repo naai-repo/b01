@@ -6,7 +6,7 @@ app.get('/', (req, res) =>{
     res.json({data:'yo'})
 })
 app.get('/route1', (req, res) =>{
-    res.json({data:'data from route 1'})
+    res.json({data:'data from shu bhai hai kiyaaaa'})
 })
 app.get('/route2', (req, res) =>{
     res.json({data:'data from route 2'})
