@@ -1,0 +1,7 @@
+.sdt{
+    background-color: bisque;
+    width: 589px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto
+}
