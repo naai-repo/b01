@@ -66,6 +66,14 @@
     }
   }
 
+  .mapboxgl-control-container{
+    display: none
+  }
+
+  .mapboxgl-marker{
+    z-index: 10;
+  }
+
   @layer base {
     * {
       @apply border-border;

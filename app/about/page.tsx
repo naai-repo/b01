@@ -5,20 +5,10 @@ import Map, {Marker,GeolocateControl} from 'react-map-gl';
 
  import { useState } from "react";
 let token  = 'pk.eyJ1IjoibXlwZXJybyIsImEiOiJjbDRmZGVwNmwwMjlmM3BvZm02czd5ZWhlIn0.vjixPEoZnR1G6QmKxMva2w'
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-  } from "@/components/ui/dropdown-menu"
-  import { Button } from "@/components/ui/button"
-  import { Moon, Sun } from "lucide-react"
-  import { useTheme } from "next-themes"
-  
-  import { z } from "zod"
+
   
   import { Input } from "@/components/ui/input"
-  import { toast } from "@/components/ui/use-toast"
+
   import { Label } from "@/components/ui/label"
   
   
@@ -27,7 +17,7 @@ export default function About() {
     const [viewState, setViewState] = useState({
         longitude: -100,
         latitude: 40,
-        zoom: 3.5
+        zoom: 8.5
       });
   return (
   
@@ -42,7 +32,7 @@ export default function About() {
     style={{width: 500, height: 250}}
     mapStyle="mapbox://styles/mapbox/streets-v9"
   >
-    <Marker draggable={"true"} longitude={-100} latitude={40} anchor="bottom" >
+    <Marker draggable={true} longitude={-100} latitude={40} anchor="bottom" >
       
      </Marker>
   </Map> 
@@ -146,3 +136,40 @@ export default function About() {
 
   );
 }
+
+
+
+//////////////////////
+
+
+
+
+// <section className="w-full relative -mt-6 z-10">
+// <div className="container px-4 md:px-6">
+//     <div className="max-w-xl mx-auto space-y-6 rounded-lg border bg-card text-card-foreground shadow-sm p-5">
+//         {/* <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Get in touch with Naai</h2> */}
+//         {/* <p className="text-gray-500 dark:text-gray-400 md:text-xl">
+//             Fill out the form below and we'll get back to you as soon as possible.
+//         </p> */}
+//         <form className="space-y-4">
+//             <div>
+//                 <label htmlFor="add">Address Preview</label>
+//                 <Textarea placeholder="1/3 Gandhi Irwin Road Super Complex" id="add" />
+//             </div>
+//             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+//                 <label htmlFor="plot">Building/Plot No.</label>
+//                 <label htmlFor="floor">Floor/Phase</label>
+//                 <Input placeholder="Building/Plot no." id='plot' />
+//                 <Input placeholder="Enter Floor" type="text" />
+//             </div>
+//             <div>
+//                 <label htmlFor="add2">Address Line 2</label>
+//                 <Input className="mt-0" placeholder="Address Line 2" id="add2" />
+//             </div>
+//             <Button className="w-full" type="submit">
+//                 Continue
+//             </Button>
+//         </form>
+//     </div>
+// </div>
+// </section>
