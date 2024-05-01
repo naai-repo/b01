@@ -1,99 +1,77 @@
-'use client';
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea';
-import "mapbox-gl/dist/mapbox-gl.css";
+'use client'
+import Map, {Marker, NavigationControl} from 'react-map-gl';
 
-import React, { useEffect } from 'react'
-import Map, { Marker, GeolocateControl } from 'react-map-gl';
-import { useState } from "react";
+import {useState, useCallback} from 'react';
+import ControlPanel from './control-panel';
+import Pin from './pin';
 
-let token = 'pk.eyJ1IjoibXlwZXJybyIsImEiOiJjbDRmZGVwNmwwMjlmM3BvZm02czd5ZWhlIn0.vjixPEoZnR1G6QmKxMva2w'
-import styles from './styles.module.css';
-import ReactMapGl from 'react-map-gl';
+import type {MarkerDragEvent, LngLat} from 'react-map-gl';
 
-const Page = () => {
-    let [newPlace, setNewPlace] = useState({lat:0, long:0});
-    const [viewPort, setViewPort] = useState({
-        width: '100%',
-        height: '400px',
-        latitude:28.6447,
-        longitude:77.217,
-        zoom:10
+import GeocoderControl from './geocoder-control';
+// eslint-disable-next-line
+
+
+export default function App() {
+  const [marker, setMarker] = useState({
+    latitude: 28.68,
+    longitude: 77.31
+  });
+  const [events, logEvents] = useState<Record<string, LngLat>>({});
+
+  const onMarkerDragStart = useCallback((event: MarkerDragEvent) => {
+    logEvents(_events => ({..._events, onDragStart: event.lngLat}));
+  }, []);
+
+  const onMarkerDrag = useCallback((event: MarkerDragEvent) => {
+    logEvents(_events => ({..._events, onDrag: event.lngLat}));
+
+    setMarker({
+      longitude: event.lngLat.lng,
+      latitude: event.lngLat.lat
     });
-    useEffect(() => {
-        if ("geolocation" in navigator) {
-          navigator.geolocation.getCurrentPosition(position => {
-            const { latitude, longitude } = position.coords;
-            setViewPort(prevViewport => ({
-              ...prevViewport,
-              latitude,
-              longitude
-            }));
+  }, []);
 
-            setNewPlace({
-                lat:latitude,
-                long:longitude
-            });
-            
-          });
-        } else {
-          console.log("Geolocation is not supported by this browser.");
-        }
-      }, []); 
-    
-    function handleClick(v:any){
+      function handleClick(v:any){
         console.log(v)
        
         const {lng, lat} = v;
-        setNewPlace({
-            lat:lat,
-            long:lng
+        setMarker({
+            latitude:lat,
+            longitude:lng
         });
     }
 
-  
-    
-    const className = 'mapboxgl-control-container';
-    return (
-        <div style={{width:"100vw",height:"60vh"}}>
-            <div style={{height:"70px", backgroundColor:'purple'}}>
+  const onMarkerDragEnd = useCallback((event: MarkerDragEvent) => {
+    logEvents(_events => ({..._events, onDragEnd: event.lngLat}));
+  }, []);
 
-</div>
-    <ReactMapGl 
-   {...viewPort} 
-    mapboxAccessToken={token}
-    transitionDuration={200}
-    mapStyle='mapbox://styles/mapbox/streets-v12'
-    onViewPortChange={(v:any) => setViewPort(v)}
-    onClick={(e) => handleClick(e.lngLat)}
-    >
-        {newPlace ? (
-            <>
-            <Marker 
-                latitude={newPlace?.lat}
-                longitude={newPlace?.long}
-                offsetLeft={-3.5 * viewPort.zoom}
-                offsetTop={-7 * viewPort.zoom}
+  let TOKEN = 'pk.eyJ1IjoibXlwZXJybyIsImEiOiJjbDRmZGVwNmwwMjlmM3BvZm02czd5ZWhlIn0.vjixPEoZnR1G6QmKxMva2w';
+  return  <div style={{height:'60vh'}}>
+      <Map
+        initialViewState={{
+          longitude: 77.31,
+          latitude: 28.68,
+          zoom: 13
+        }}
+        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapboxAccessToken={TOKEN}
+        onClick={(e) => handleClick(e.lngLat)}
+      >
+         <Marker
+          longitude={marker.longitude}
+          latitude={marker.latitude}
+          anchor="bottom"
+          draggable
+          onDragStart={onMarkerDragStart}
+          onDrag={onMarkerDrag}
+          onDragEnd={onMarkerDragEnd}
+        >
+          <Pin size={20} />
+          <NavigationControl />
+        </Marker>
+        <GeocoderControl mapboxAccessToken={TOKEN} position="top-left" />
+      </Map>
+      
+    </div>
 
-            >
-            </Marker>
-            </>
-        ) : null
-        }
-
-
-</ReactMapGl>
-
-
-<div style={{height:"300px", backgroundColor:'purple'}}>
-
-</div>
-        </div>
-
-    
-
-    )
 }
-
-export default Page
